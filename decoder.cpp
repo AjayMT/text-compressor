@@ -12,7 +12,7 @@
 std::vector<bool> unpack_bits (std::vector<char> input)
 {
   std::vector<bool> bits;
-
+  bits.reserve(input.size() * 8);
   for (char c : input) {
     std::bitset<8> bitset(c);
     for (int i = 0; i < 8; i++) bits.push_back((bool)bitset[i]);
@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
   std::string tree_string(tree_begin, tree_end);
 
   // unpack input characters into bit-vector
-  std::vector<bool> bits = unpack_bits(input);
+  auto bits = unpack_bits(input);
 
   // decode tree
   tree huffman_tree = decode_huffman_tree(tree_string);

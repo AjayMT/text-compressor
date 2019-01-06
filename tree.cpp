@@ -21,7 +21,7 @@ public:
 // i am typedefing it because this long templated typename is ugly
 typedef std::unordered_map<char, std::vector<bool>> charmap;
 
-// encoded_tree contains a string (representation of a tree)
+// encoded_tree contains a string representation of a tree
 // and a map of characters to bit-vectors
 class encoded_tree {
 public:
@@ -97,10 +97,10 @@ std::string tree_to_string (tree t)
 }
 
 // convert a tree into a map of characters to bit-vectors
-void tree_to_map (tree t, charmap *map, std::vector<bool> path)
+void tree_to_map (tree t, charmap& map, std::vector<bool> path)
 {
   if (t.leaf()) {
-    (*map)[t.character] = path;
+    map[t.character] = path;
     return;
   }
 
@@ -122,7 +122,7 @@ encoded_tree encode_huffman_tree (tree t)
 {
   charmap map;
   std::vector<bool> path;
-  tree_to_map(t, &map, path);
+  tree_to_map(t, map, path);
   return encoded_tree(tree_to_string(t), map);
 }
 

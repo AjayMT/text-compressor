@@ -16,6 +16,7 @@
 std::vector<char> pack_bits (std::vector<bool> bits)
 {
   std::vector<char> output;
+  output.reserve(bits.size() / 8);
 
   int size = bits.size();
   int prev = 0;
