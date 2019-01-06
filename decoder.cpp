@@ -9,13 +9,13 @@
 
 
 // unpack a string of characters into a bit-vector
-std::vector<bool> unpack_bits (std::vector<char> input)
+std::vector<int> unpack_bits (std::vector<char> input)
 {
-  std::vector<bool> bits;
+  std::vector<int> bits;
   bits.reserve(input.size() * 8);
   for (char c : input) {
     std::bitset<8> bitset(c);
-    for (int i = 0; i < 8; i++) bits.push_back((bool)bitset[i]);
+    for (int i = 0; i < 8; i++) bits.push_back(bitset[i]);
   }
 
   return bits;
@@ -48,7 +48,7 @@ int main (int argc, char *argv[])
 
   // navigate tree and write output
   tree current = huffman_tree;
-  for (bool b : bits) {
+  for (auto b : bits) {
     if (b) current = *current.right;
     else current = *current.left;
 

@@ -13,7 +13,7 @@
 
 
 // pack a vector of bits into a vector of chars
-std::vector<char> pack_bits (std::vector<bool> bits)
+std::vector<char> pack_bits (std::vector<int> bits)
 {
   std::vector<char> output;
   output.reserve(bits.size() / 8);
@@ -25,10 +25,8 @@ std::vector<char> pack_bits (std::vector<bool> bits)
     if (cur - prev != 8) continue;
 
     std::bitset<8> bitset;
-    for (int i = 0; i < 8; ++i) {
-      if (bits[prev + i]) bitset[i] = 1;
-      else bitset[i] = 0;
-    }
+    for (int i = 0; i < 8; ++i)
+      bitset[i] = bits[prev + i];
 
     output.push_back((char)bitset.to_ulong());
     prev = cur;
@@ -43,8 +41,7 @@ std::vector<char> pack_bits (std::vector<bool> bits)
       continue;
     }
 
-    if (bits[prev + i]) last_bit[i] = 1;
-    else last_bit[i] = 0;
+    last_bit[i] = bits[prev + i];
   }
 
   output.push_back((char)last_bit.to_ulong());
@@ -83,10 +80,10 @@ int main (int argc, char *argv[])
   encoded_tree et = encode_huffman_tree(huffman_tree);
 
   // assemble and write compressed output
-  std::vector<bool> bits;
+  std::vector<int> bits;
   for (auto c : input) {
     auto bs = et.map[c];
-    for (auto b : bs) bits.push_back(b);
+    bits.insert(bits.end(), bs.begin(), bs.end());
   }
   auto packed = pack_bits(bits);
   for (auto c : packed) std::cout << c;

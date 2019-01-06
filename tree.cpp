@@ -8,7 +8,8 @@
 
 
 // basic binary tree
-class tree {
+class tree
+{
 public:
   std::shared_ptr<tree> left = nullptr, right = nullptr;
   char character;
@@ -19,11 +20,12 @@ public:
 
 // charmap is a map of characters to bit-vectors in an encoded tree
 // i am typedefing it because this long templated typename is ugly
-typedef std::unordered_map<char, std::vector<bool>> charmap;
+typedef std::unordered_map<char, std::vector<int>> charmap;
 
 // encoded_tree contains a string representation of a tree
 // and a map of characters to bit-vectors
-class encoded_tree {
+class encoded_tree
+{
 public:
   std::string str;
   charmap map;
@@ -32,7 +34,8 @@ public:
 };
 
 // overload comparison operator to make trees sortable
-bool operator> (const tree& left, const tree& right) {
+bool operator> (const tree& left, const tree& right)
+{
   return left.frequency > right.frequency;
 }
 
@@ -97,23 +100,23 @@ std::string tree_to_string (tree t)
 }
 
 // convert a tree into a map of characters to bit-vectors
-void tree_to_map (tree t, charmap& map, std::vector<bool> path)
+void tree_to_map (tree t, charmap& map, std::vector<int> path)
 {
   if (t.leaf()) {
     map[t.character] = path;
     return;
   }
 
-  std::vector<bool> leftpath, rightpath;
+  std::vector<int> leftpath, rightpath;
 
   leftpath.reserve(path.size() + 1); // pre-allocate memory for S P E E D
   leftpath.insert(leftpath.end(), path.begin(), path.end()); // copy current path
-  leftpath.push_back(false);
+  leftpath.push_back(0);
   tree_to_map(*t.left, map, leftpath);
 
   rightpath.reserve(path.size() + 1);
   rightpath.insert(rightpath.end(), path.begin(), path.end());
-  rightpath.push_back(true);
+  rightpath.push_back(1);
   tree_to_map(*t.right, map, rightpath);
 }
 
@@ -121,7 +124,7 @@ void tree_to_map (tree t, charmap& map, std::vector<bool> path)
 encoded_tree encode_huffman_tree (tree t)
 {
   charmap map;
-  std::vector<bool> path;
+  std::vector<int> path;
   tree_to_map(t, map, path);
   return encoded_tree(tree_to_string(t), map);
 }
