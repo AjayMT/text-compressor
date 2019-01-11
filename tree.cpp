@@ -66,11 +66,10 @@ tree construct_huffman_tree(std::vector<std::pair<char, int>> frequencies)
     t.frequency = t.left->frequency + t.right->frequency;
 
     trees.pop_back(); trees.pop_back();
-
-    // there's probably a more efficient way to insert a new
-    // tree at the right position
-    trees.push_back(t);
-    std::sort(trees.begin(), trees.end(), std::greater<tree>());
+    trees.insert(
+      std::lower_bound(trees.begin(), trees.end(), t, std::greater<tree>()),
+      t
+      );
   }
 
   return trees[0];
