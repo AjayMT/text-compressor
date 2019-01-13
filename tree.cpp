@@ -57,10 +57,13 @@ std::vector<tree> treeify (std::vector<std::pair<char, int>> frequencies)
 // find the correct position for a tree in a sorted vector of trees
 int find_position (std::vector<tree>& trees, tree& t, int begin, int end)
 {
+  if (t > trees[begin]) return begin;
+  if (!(t > trees[end - 1])) return end;
   if (end - begin <= 1) return begin;
+
   int mid = begin + ((end - begin) / 2);
-  if (t > trees[mid]) return find_position(trees, t, mid, end);
-  return find_position(trees, t, begin, mid);
+  if (t > trees[mid]) return find_position(trees, t, begin, mid);
+  return find_position(trees, t, mid, end);
 }
 
 // construct a huffman tree out of a vector of char-frequency pairs
@@ -75,7 +78,7 @@ tree construct_huffman_tree(std::vector<std::pair<char, int>> frequencies)
 
     trees.pop_back(); trees.pop_back();
     trees.insert(
-      trees.begin() + find_position(trees, t, 0, trees.size()),
+      trees.begin() + find_position(trees, t, 0, size - 1),
       t
       );
   }
